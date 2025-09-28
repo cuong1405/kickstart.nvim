@@ -166,6 +166,14 @@ vim.o.scrolloff = 10
 -- See `:help 'confirm'`
 vim.o.confirm = true
 
+-- Set indentation to 4 spaces
+-- See `:help 'tabstop'`, `:help 'shiftwidth'`, `:help 'softtabstop'`, and `:help 'expandtab'`
+--  This will make tabs and indents use 4 spaces, which is the convention for Python and many other languages.
+vim.o.tabstop = 4 -- Number of spaces that a <Tab> counts for
+vim.o.shiftwidth = 4 -- Size of an indent
+vim.o.softtabstop = 4 -- Number of spaces that a <Tab> counts for while editing
+vim.o.expandtab = true -- Use spaces instead of tabs
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -673,7 +681,7 @@ require('lazy').setup({
       local servers = {
         -- clangd = {},
         -- gopls = {},
-        -- pyright = {},
+        pyright = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
