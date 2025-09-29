@@ -192,6 +192,20 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 -- or just use <C-\><C-n> to exit terminal mode
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
+vim.keymap.set('n', '<leader>tt', function()
+  local file_dir = vim.fn.expand '%:p:h'
+  -- Open a 10-line horizontal split with a terminal and capture the buffer number
+  vim.cmd '10split'
+  vim.cmd 'terminal'
+  -- Get the channel id of the terminal
+  local chan_id = vim.b.terminal_job_id
+  -- Send the cd command only if file_dir is not empty and in a terminal
+  if file_dir ~= '' and chan_id then
+    vim.api.nvim_chan_send(chan_id, 'cd ' .. file_dir .. '\nclear\n')
+  end
+  vim.cmd 'startinsert'
+end, { desc = 'Open terminal (horizontal split) at buffer directory' })
+
 -- TIP: Disable arrow keys in normal mode
 -- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
 -- vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
@@ -681,7 +695,7 @@ require('lazy').setup({
       local servers = {
         -- clangd = {},
         -- gopls = {},
-        pyright = {},
+        -- pyright = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -778,6 +792,7 @@ require('lazy').setup({
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
+        python = { 'black' },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
