@@ -169,10 +169,10 @@ vim.o.confirm = true
 -- Set indentation to 4 spaces
 -- See `:help 'tabstop'`, `:help 'shiftwidth'`, `:help 'softtabstop'`, and `:help 'expandtab'`
 --  This will make tabs and indents use 4 spaces, which is the convention for Python and many other languages.
-vim.o.tabstop = 4 -- Number of spaces that a <Tab> counts for
-vim.o.shiftwidth = 4 -- Size of an indent
-vim.o.softtabstop = 4 -- Number of spaces that a <Tab> counts for while editing
-vim.o.expandtab = true -- Use spaces instead of tabs
+-- vim.o.tabstop = 4 -- Number of spaces that a <Tab> counts for
+-- vim.o.shiftwidth = 4 -- Size of an indent
+-- vim.o.softtabstop = 4 -- Number of spaces that a <Tab> counts for while editing
+-- vim.o.expandtab = true -- Use spaces instead of tabs
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
@@ -192,19 +192,17 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 -- or just use <C-\><C-n> to exit terminal mode
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
-vim.keymap.set('n', '<leader>tt', function()
+-- Open a small horizontal terminal split in the directory of the current buffer with <leader>ot
+vim.keymap.set('n', '<leader>ot', function()
   local file_dir = vim.fn.expand '%:p:h'
-  -- Open a 10-line horizontal split with a terminal and capture the buffer number
   vim.cmd '10split'
   vim.cmd 'terminal'
-  -- Get the channel id of the terminal
   local chan_id = vim.b.terminal_job_id
-  -- Send the cd command only if file_dir is not empty and in a terminal
   if file_dir ~= '' and chan_id then
     vim.api.nvim_chan_send(chan_id, 'cd ' .. file_dir .. '\nclear\n')
   end
   vim.cmd 'startinsert'
-end, { desc = 'Open terminal (horizontal split) at buffer directory' })
+end, { desc = '[O]pen [T]erminal (horizontal) at buffer directory' })
 
 -- TIP: Disable arrow keys in normal mode
 -- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
@@ -369,6 +367,7 @@ require('lazy').setup({
         { '<leader>s', group = '[S]earch' },
         { '<leader>t', group = '[T]oggle' },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
+        { '<leader>o', group = '[O]pen' },
       },
     },
   },
@@ -695,7 +694,7 @@ require('lazy').setup({
       local servers = {
         -- clangd = {},
         -- gopls = {},
-        -- pyright = {},
+        pyright = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -703,7 +702,7 @@ require('lazy').setup({
         --    https://github.com/pmizio/typescript-tools.nvim
         --
         -- But for many setups, the LSP (`ts_ls`) will work just fine
-        -- ts_ls = {},
+        ts_ls = {},
         --
 
         lua_ls = {
@@ -738,6 +737,8 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
+        'prettierd', -- Used to format TypeScript, JavaScript, and more
+        'eslint_d', -- Used for TypeScript, Javascript linting
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -796,6 +797,10 @@ require('lazy').setup({
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
+        javascript = { { 'prettierd', 'prettier' } },
+        typescript = { { 'prettierd', 'prettier' } },
+        javascriptreact = { { 'prettierd', 'prettier' } },
+        typescriptreact = { { 'prettierd', 'prettier' } },
       },
     },
   },
@@ -967,7 +972,25 @@ require('lazy').setup({
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+      ensure_installed = {
+        'bash',
+        'c',
+        'diff',
+        'html',
+        'lua',
+        'luadoc',
+        'markdown',
+        'markdown_inline',
+        'query',
+        'vim',
+        'vimdoc',
+        'typescript',
+        'tsx',
+        'javascript',
+        'json',
+        'css',
+        'html',
+      },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
@@ -1007,7 +1030,7 @@ require('lazy').setup({
   --    This is the easiest way to modularize your config.
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-  -- { import = 'custom.plugins' },
+  { import = 'custom.plugins' },
   --
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
   -- Or use telescope!
