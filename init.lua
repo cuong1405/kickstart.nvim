@@ -169,10 +169,10 @@ vim.o.confirm = true
 -- Set indentation to 4 spaces
 -- See `:help 'tabstop'`, `:help 'shiftwidth'`, `:help 'softtabstop'`, and `:help 'expandtab'`
 --  This will make tabs and indents use 4 spaces, which is the convention for Python and many other languages.
--- vim.o.tabstop = 4 -- Number of spaces that a <Tab> counts for
--- vim.o.shiftwidth = 4 -- Size of an indent
--- vim.o.softtabstop = 4 -- Number of spaces that a <Tab> counts for while editing
--- vim.o.expandtab = true -- Use spaces instead of tabs
+vim.o.tabstop = 4 -- Number of spaces that a <Tab> counts for
+vim.o.shiftwidth = 4 -- Size of an indent
+vim.o.softtabstop = 4 -- Number of spaces that a <Tab> counts for while editing
+vim.o.expandtab = true -- Use spaces instead of tabs
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
@@ -904,7 +904,7 @@ require('lazy').setup({
         -- <c-k>: Toggle signature help
         --
         -- See :h blink-cmp-config-keymap for defining your own keymap
-        preset = 'default',
+        preset = 'super-tab',
 
         -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
         --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
@@ -1047,7 +1047,7 @@ require('lazy').setup({
         --  the list of additional_vim_regex_highlighting and disabled languages for indent.
         additional_vim_regex_highlighting = { 'ruby' },
       },
-      indent = { enable = true, disable = { 'ruby', 'typescript', 'javascript' } },
+      indent = { enable = true, disable = { 'ruby', 'typescript', 'javascript', 'typescriptreact', 'javascriptreact' } },
 
       -- Add textobjects configuration here
       textobjects = {
