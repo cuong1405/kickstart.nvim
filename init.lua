@@ -904,7 +904,32 @@ require('lazy').setup({
         -- <c-k>: Toggle signature help
         --
         -- See :h blink-cmp-config-keymap for defining your own keymap
-        preset = 'super-tab',
+        preset = 'enter',
+
+        ['<Tab>'] = {
+          function(cmp)
+            if cmp.is_menu_visible() then
+              -- If completion menu is open, select the next item
+              return cmp.select_next()
+            end
+            -- If no menu, let the preset handle snippet jumping or fallback
+          end,
+          'snippet_forward', -- This will be called if the function above doesn't run
+          'fallback',
+        },
+
+        -- Use Shift-Tab to select the previous item, or jump to the previous placeholder
+        ['<S-Tab>'] = {
+          function(cmp)
+            if cmp.is_menu_visible() then
+              -- If completion menu is open, select the previous item
+              return cmp.select_prev()
+            end
+            -- If no menu, let the preset handle snippet jumping or fallback
+          end,
+          'snippet_backward', -- This will be called if the function above doesn't run
+          'fallback',
+        },
 
         -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
         --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
@@ -920,6 +945,9 @@ require('lazy').setup({
         -- By default, you may press `<c-space>` to show the documentation.
         -- Optionally, set `auto_show = true` to show the documentation after a delay.
         documentation = { auto_show = false, auto_show_delay_ms = 500 },
+        list = {
+          selection = { preselect = false, auto_insert = true },
+        },
       },
 
       sources = {
