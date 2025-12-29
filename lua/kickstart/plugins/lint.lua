@@ -15,6 +15,8 @@ return {
         -- C/C++ linting
         c = { 'cpplint' },
         cpp = { 'cpplint' },
+        -- Golang linting
+        go = { 'golangci-lint' },
       }
 
       -- To allow other plugins to add linters to require('lint').linters_by_ft,

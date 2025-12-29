@@ -730,7 +730,31 @@ require('lazy').setup({
         --
         -- TypeScript servers
         -- ts_ls = {},
-        --
+
+        -- Golang servers
+        gopls = {
+          settings = {
+            gopls = {
+              analyses = {
+                unusedparams = true,
+              },
+              staticcheck = true,
+              gofumpt = true,
+              hints = {
+                assignVariableTypes = true,
+                compositeLiteralFields = true,
+                compositeLiteralTypes = true,
+                constantValues = true,
+                functionTypeParameters = true,
+                parameterNames = true,
+                rangeVariableTypes = true,
+              },
+            },
+          },
+        },
+
+        -- SQL servers
+        sqls = {},
 
         lua_ls = {
           -- cmd = { ... },
@@ -763,13 +787,20 @@ require('lazy').setup({
       -- for you, so that they are available from within Neovim.
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
-        'stylua', -- Used to format Lua code
-        'prettierd', -- Used to format TypeScript, JavaScript, and more
-        'eslint_d', -- Used for TypeScript, Javascript linting
-        'clangd', -- C/C++ LSP
         'clang-format', -- C/C++ formatter
+        'clangd', -- C/C++ LSP
         'codelldb', -- C/C++ debugger
         'cpplint', -- C/C++ linter
+        'delve', -- Debugger
+        'eslint_d', -- Used for TypeScript, Javascript linting
+        'gofumpt', -- Stricter formatter
+        'goimports', -- Formatter (fixes imports)
+        'golangci-lint', -- Linter
+        'gomodifytags', -- Tool to manipulate struct tags
+        'impl', -- Tool to generate interface implementations
+        'prettierd', -- Used to format TypeScript, JavaScript, and more
+        'sql-formatter', -- SQL Formatter
+        'stylua', -- Used to format Lua code
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -842,6 +873,12 @@ require('lazy').setup({
         -- C/C++ formatters
         c = { 'clang-format' },
         cpp = { 'clang-format' },
+
+        -- Golang formatters
+        go = { 'goimports', 'gofumpt' },
+
+        -- SQL formatters
+        sql = { 'sql-formatter' },
       },
     },
   },
@@ -951,9 +988,10 @@ require('lazy').setup({
       },
 
       sources = {
-        default = { 'lsp', 'path', 'snippets', 'lazydev' },
+        default = { 'lsp', 'path', 'snippets', 'lazydev', 'dadbod' },
         providers = {
           lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
+          dadbod = { name = 'Dadbod', module = 'vim_dadbod_completion.blink' },
         },
       },
 
@@ -1048,23 +1086,27 @@ require('lazy').setup({
       ensure_installed = {
         'bash',
         'c',
-        'cpp',
         'cmake',
+        'cpp',
+        'css',
         'diff',
+        'go',
+        'gomod',
+        'gosum',
+        'gowork',
         'html',
+        'javascript',
+        'json',
         'lua',
         'luadoc',
         'markdown',
         'markdown_inline',
         'query',
+        'sql',
+        'tsx',
+        'typescript',
         'vim',
         'vimdoc',
-        'typescript',
-        'tsx',
-        'javascript',
-        'json',
-        'css',
-        'html',
       },
       -- Autoinstall languages that are not installed
       auto_install = true,
@@ -1073,7 +1115,7 @@ require('lazy').setup({
         -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
         --  If you are experiencing weird indenting issues, add the language to
         --  the list of additional_vim_regex_highlighting and disabled languages for indent.
-        additional_vim_regex_highlighting = { 'ruby' },
+        additional_vim_regex_highlighting = { 'ruby', 'typescript', 'javascript', 'typescriptreact', 'javascriptreact' },
       },
       indent = { enable = true, disable = { 'ruby', 'typescript', 'javascript', 'typescriptreact', 'javascriptreact' } },
 
